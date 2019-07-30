@@ -28,4 +28,4 @@ $fp = fopen(dirname(__FILE__).'/over_wd.txt', 'w');
 	fwrite($fp, $over_wd);
 fclose($fp);
 
-echo('<script type="text/javascript"> alert("保存成功！"); history.go(-1); </script>');
+echo('<script type="text/javascript"> alert("保存成功！"); location.href="./?"; </script>');
