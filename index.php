@@ -7,13 +7,21 @@
 	$start_time = $mico_second + $second;
 	
 	$get_filename = isset($_GET['filename']) ? $_GET['filename'] : '';
+	
+	if(!file_exists(dirname(__FILE__).'/in_wd.txt'))
+	{
+		file_put_contents(dirname(__FILE__).'/in_wd.txt', '');
+	}
+	if(!file_exists(dirname(__FILE__).'/over_wd.txt'))
+	{
+		file_put_contents(dirname(__FILE__).'/over_wd.txt', '');
+	}
 ?>
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Apache/Nginx日志分析</title>
-</head>
 <style type="text/css">
 	body{background:#f7f4ef;}
 	form{margin:0;}
@@ -21,8 +29,10 @@
 	.right{float:right;}
 	.clear{clear:both;}
 	*{font-size:12px; line-height:1.5;}
-	.result p{margin:6px 0; line-height:1.0;}
-	.result p span.red{background:#ff0000; color:#ffffff; padding:0 3px;}
+	/*.result p{margin:6px 0; line-height:1.0;}
+	.result p span.red{background:#ff0000; color:#ffffff; padding:0 3px;}*/
+	.result div span.red{background:#ff0000; color:#ffffff; padding:0 3px;}
+	.result div{margin:6px 0; line-height:1.0;}
 	.result u{background:#b3a994; text-decoration:none;}
 	.result em{background:#000000; color:#ffffff; font-style:normal;}
 	textarea{border:1px solid #cecece; margin-right:15px;}
@@ -32,11 +42,11 @@
 	.result u{background:#d4d0c8; text-decoration:none;}
 	textarea{border:1px solid #cecece; margin-right:15px; line-height:1.2;}
 </style>
+</head>
 <body>
 <?php
 	include(dirname(__FILE__).'/tool_bar.inc.php');
 ?>
-
 <div style="height:190px;">&nbsp; </div>
 <div class="result">
 <?php
@@ -52,7 +62,9 @@
 		}
 		else
 		{
-			echo '<a href="./ip_net_count.php?filename='.(isset($_GET['filename']) ? $_GET['filename'] : '').'" target="_blank">IP段统计</a>';
+			echo '<a href="./ip_net_count.php?filename='.(isset($_GET['filename']) ? $_GET['filename'] : '').'" target="_blank">对结果按C段统计数据</a> &nbsp; ';
+			
+			echo '<a href="./ip_b_net_count.php?filename='.(isset($_GET['filename']) ? $_GET['filename'] : '').'" target="_blank">对结果按B段统计数据</a>';
 			
 			$fp 	= fopen(dirname(__FILE__).'/in_wd.txt', 'r');//匹配词
 			$in_wd	= [];
@@ -99,7 +111,7 @@
 					continue;
 				}
 				
-				if($all_line % 10000 == 0)
+				if($all_line % 20000 == 0)
 				{
 					flush();
 					ob_flush();
@@ -175,8 +187,7 @@
 				//最多输出10000行
 				if($c < 10000)
 				{
-					echo "<p><u>[".($c+1)."]</u> {$sl} ";
-					echo "</p>\n";
+					echo "<div><u>[".($c+1)."]</u> {$sl} </div>\n";
 				}
 				
 				$c++;
