@@ -1,6 +1,5 @@
 <?php
 	set_time_limit(0);
-	include(dirname(__FILE__).'/function.inc.php');
 	include(dirname(__FILE__).'/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());

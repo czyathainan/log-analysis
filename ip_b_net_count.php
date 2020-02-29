@@ -11,7 +11,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>统计C ip段的访问次数</title>
+<title>统计B段ip的访问次数</title>
 </head>
 <style type="text/css">
 	body{}
@@ -83,7 +83,7 @@
 					continue;
 				}
 				
-				if($all_line % 10000 == 0){
+				if($all_line % 20000 == 0){
 					flush();
 					ob_flush();
 					sleep(1);
@@ -158,7 +158,7 @@
 				//echo "<p> {$sl} </p>\n";
 				if($sl)
 				{
-					preg_match('/(\d{1,3}\.){3}(?=\d{1,3})/', $sl, $match);
+					preg_match('/(\d{1,3}\.){2}(?=\d{1,3}\.\d{1,3})/', $sl, $match);
 					//print_r( $match );
 					if(isset($match[0]) && $match[0])
 					{
@@ -173,7 +173,7 @@
 			//print_r( $ip_net_data );
 			$ip_net_count_values_data	= array_count_values($ip_net_data);
 			arsort($ip_net_count_values_data, SORT_NUMERIC);
-			echo "<p><b>共有 ".array_sum($ip_net_count_values_data)." 条日志，".count($ip_net_count_values_data)."个ip段</b></p>";
+			echo "<p><b>共匹配 ".array_sum($ip_net_count_values_data)." 条日志，".count($ip_net_count_values_data)."个ip段</b></p>";
 			foreach($ip_net_count_values_data AS $ip_net=>$v)
 			{
 				echo "<p><a href=\"http://api.jiayyy.com/v1/get-ip-info?ip={$ip_net}.1\" target=\"_blank\">{$ip_net}.*</a> &nbsp; &nbsp; 访问 {$v} 次</p>";
