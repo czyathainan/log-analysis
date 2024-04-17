@@ -16,15 +16,15 @@ $rule_arr['in_wd_range']	= $in_wd_range;
 $rule_arr['wd_priority']	= $wd_priority;
 
 
-$fp = fopen(dirname(__FILE__).'/rule.cache.php', 'w');
+$fp = fopen(dirname(__FILE__).'/runtime/rule.cache.php', 'w');
 	fwrite($fp, "<?php".PHP_EOL."\$cfg_rule_cache = ".var_export($rule_arr, true).";");
 fclose($fp);
 
-$fp = fopen(dirname(__FILE__).'/in_wd.txt', 'w');
+$fp = fopen(dirname(__FILE__).'/runtime/in_wd.txt', 'w');
 	fwrite($fp, $in_wd);
 fclose($fp);
 
-$fp = fopen(dirname(__FILE__).'/over_wd.txt', 'w');
+$fp = fopen(dirname(__FILE__).'/runtime/over_wd.txt', 'w');
 	fwrite($fp, $over_wd);
 fclose($fp);
 

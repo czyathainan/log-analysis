@@ -39,13 +39,13 @@
 		
 		<form method="POST" action="rule.php?update=1" class="left">
 			<div style="float:left;">
-				请输入你要查找的关键字眼 (多个关键词用换行隔开)<br />
-				<textarea name="in_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/in_wd.txt');?></textarea>
+				请输入你要查找的关键字眼 (一行一个关键词)<br />
+				<textarea name="in_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/in_wd.txt');?></textarea>
 			</div>
 
 			<div class="left">
-				请输入你要排除的关键字眼<br />
-				<textarea name="over_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/over_wd.txt');?></textarea>
+				请输入你要排除的关键字眼 (一行一个关键词)<br />
+				<textarea name="over_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/over_wd.txt');?></textarea>
 			</div>
 			<div class="clear"></div>
 			
@@ -60,8 +60,8 @@
 				
 				匹配范围：<select name="in_wd_range">
 				<?php
-					$s = '<option value="location">Server location</option>
-					<option value="all">All</option>';
+					$s = '<option value="all">All</option>
+					<option value="location">Server location</option>';
 					echo str_ireplace('value="'.$cfg_rule_cache['in_wd_range'].'"', 'value="'.$cfg_rule_cache['in_wd_range'].'" selected', $s);
 				?>
 				</select>&nbsp; 

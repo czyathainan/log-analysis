@@ -1,17 +1,19 @@
 <?php
 	set_time_limit(0);
-	include(dirname(__FILE__).'/rule.cache.php');
+	include(dirname(__FILE__).'/function.inc.php');
+	include(dirname(__FILE__).'/runtime/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());
 	$start_time = $mico_second + $second;
 	
-	$get_filename = isset($_GET['filename']) ? $_GET['filename'] : '';
+	$get_filename	= isset($_GET['filename']) ? $_GET['filename'] : '';
+	$get_type 		= isset($_GET['type']) ? $_GET['type'] : '';
 ?>
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>统计C ip段的访问次数</title>
+<title>统计ip的访问次数</title>
 </head>
 <style type="text/css">
 	body{}
@@ -40,7 +42,7 @@
 		if(!file_exists(dirname(__FILE__).'/log/'.$get_filename)){
 			echo('<p style="color:#ff0000;">日志文件'.$get_filename.'未找到，请检查！</p>');
 		}else{
-			$fp 			= fopen(dirname(__FILE__).'/in_wd.txt', 'r');//匹配词
+			$fp 			= fopen(dirname(__FILE__).'/runtime/in_wd.txt', 'r');//匹配词
 			$in_wd			= [];
 			$ip_net_data	= [];
 			while(!feof($fp)){
@@ -54,7 +56,7 @@
 			$in_wd_length = count($in_wd);
 			fclose($fp);
 			
-			$fp = fopen(dirname(__FILE__).'/over_wd.txt', 'r');//排除词
+			$fp = fopen(dirname(__FILE__).'/runtime/over_wd.txt', 'r');//排除词
 			$over_wd = Array();
 			while(!feof($fp)){
 				$s2 = fgets($fp);
@@ -83,7 +85,7 @@
 					continue;
 				}
 				
-				if($all_line % 10000 == 0){
+				if($all_line % 20000 == 0){
 					flush();
 					ob_flush();
 					sleep(1);
@@ -158,12 +160,31 @@
 				//echo "<p> {$sl} </p>\n";
 				if($sl)
 				{
-					preg_match('/(\d{1,3}\.){3}(?=\d{1,3})/', $sl, $match);
-					//print_r( $match );
-					if(isset($match[0]) && $match[0])
+					switch($get_type)
 					{
-						$ip_net_data[]	= trim($match[0], '.');
-					}
+						case 'c_net' : //按B段统计
+							preg_match('/(\d{1,3}\.){3}(?=\d{1,3})/', $sl, $match);
+							if(isset($match[0]) && $match[0])
+							{
+								$ip_net_data[]	= trim($match[0], '.').'.*';
+							}
+						break;
+						
+						case 'b_net' : //按C段统计
+							preg_match('/(\d{1,3}\.){2}(?=\d{1,3}\.\d{1,3})/', $sl, $match);
+							if(isset($match[0]) && $match[0])
+							{
+								$ip_net_data[]	= trim($match[0], '.').'.*.*';
+							}
+						break;
+						
+						default : 
+							preg_match('/(\d{1,3}\.){3}\d{1,3}/', $sl, $match);
+							if(isset($match[0]) && $match[0])
+							{
+								$ip_net_data[]	= trim($match[0], '.');
+							}
+					}	
 				}
 				
 				$c++;
@@ -173,10 +194,10 @@
 			//print_r( $ip_net_data );
 			$ip_net_count_values_data	= array_count_values($ip_net_data);
 			arsort($ip_net_count_values_data, SORT_NUMERIC);
-			echo "<p><b>共有 ".array_sum($ip_net_count_values_data)." 条日志，".count($ip_net_count_values_data)."个ip段</b></p>";
-			foreach($ip_net_count_values_data AS $ip_net=>$v)
+			echo "<p><b>共匹配 ".array_sum($ip_net_count_values_data)." 条日志，".count($ip_net_count_values_data)."个ip段</b></p>";
+			foreach($ip_net_count_values_data AS $ip=>$v)
 			{
-				echo "<p><a href=\"http://api.jiayyy.com/v1/get-ip-info?ip={$ip_net}.1\" target=\"_blank\">{$ip_net}.*</a> &nbsp; &nbsp; 访问 {$v} 次</p>";
+				echo "<p><a href=\"https://www.ip138.com/iplookup.asp?ip=".strtr($ip, ['*'=>1])."&action=2\" target=\"_blank\">{$ip}</a> &nbsp; &nbsp; 访问 {$v} 次</p>";
 			}
 		}
 		
