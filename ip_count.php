@@ -1,7 +1,7 @@
 <?php
 	set_time_limit(0);
 	include(dirname(__FILE__).'/function.inc.php');
-	include(dirname(__FILE__).'/runtime/rule.cache.php');
+	$cfg_rule_cache = include(dirname(__FILE__).'/runtime/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());
 	$start_time = $mico_second + $second;

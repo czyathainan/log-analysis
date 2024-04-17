@@ -17,7 +17,7 @@ $rule_arr['wd_priority']	= $wd_priority;
 
 
 $fp = fopen(dirname(__FILE__).'/runtime/rule.cache.php', 'w');
-	fwrite($fp, "<?php".PHP_EOL."\$cfg_rule_cache = ".var_export($rule_arr, true).";");
+	fwrite($fp, "<?php".PHP_EOL."return ".var_export($rule_arr, true).";");
 fclose($fp);
 
 $fp = fopen(dirname(__FILE__).'/runtime/in_wd.txt', 'w');

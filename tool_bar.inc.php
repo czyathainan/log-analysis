@@ -60,8 +60,8 @@
 				
 				匹配范围：<select name="in_wd_range">
 				<?php
-					$s = '<option value="all">All</option>
-					<option value="location">Server location</option>';
+					$s = '<option value="all">整行</option>
+					<option value="location">受访URL</option>';
 					echo str_ireplace('value="'.$cfg_rule_cache['in_wd_range'].'"', 'value="'.$cfg_rule_cache['in_wd_range'].'" selected', $s);
 				?>
 				</select>&nbsp; 

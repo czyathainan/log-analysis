@@ -1,7 +1,7 @@
 <?php
 	set_time_limit(0);
 	include(dirname(__FILE__).'/function.inc.php');
-	include(dirname(__FILE__).'/runtime/rule.cache.php');
+	$cfg_rule_cache = include(dirname(__FILE__).'/runtime/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());
 	$start_time = $mico_second + $second;
@@ -25,7 +25,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>文本日志分析</title>
+<title>Apache/Nginx日志分析</title>
 <style type="text/css">
 	body{background:#e9e9ed;}
 	form{margin:0;}
