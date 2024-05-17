@@ -1,6 +1,5 @@
 <?php
 	set_time_limit(0);
-	include(dirname(__FILE__).'/function.inc.php');
 	$cfg_rule_cache = include(dirname(__FILE__).'/runtime/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());
@@ -83,7 +82,7 @@
 				}
 				$in_wd[] = $s1;
 			}
-			$in_wd_length = count($in_wd);
+			$in_wd_count = count($in_wd);
 			fclose($fp);
 			
 			$fp 		= fopen(dirname(__FILE__).'/runtime/over_wd.txt', 'r');//排除词
@@ -97,7 +96,7 @@
 				}
 				$over_wd[] = $s2;
 			}
-			$over_wd_length = count($over_wd);
+			$over_wd_count = count($over_wd);
 			fclose($fp);
 			
 			$fp	= fopen(dirname(__FILE__).'/log/'.$get_filename, 'r');
@@ -126,24 +125,26 @@
 				
 				$sl_pass = 1; //当前行的记录是否符合筛选规则，1：是，0否
 				
-				if($in_wd_length && $cfg_rule_cache['wd_priority']=='in_wd') //查找优先
+				if($in_wd_count && $cfg_rule_cache['wd_priority']=='in_wd') //查找优先
 				{
 					$sl_pass = 0;
 					foreach($in_wd AS $key){
 						$key = str_ireplace('<', '&lt;', $key);
 						$key = str_ireplace('>', '&gt;', $key);
-						if(substr_count($sl, $key)){
+						//if(substr_count($sl, $key)){
+						if(stripos($sl, $key) !== false){
 							$sl_pass = 1;
 							break;
 						}
 					}
 				}
-				else if($over_wd_length && $cfg_rule_cache['wd_priority']=='over_wd') //排除优先
+				else if($over_wd_count && $cfg_rule_cache['wd_priority']=='over_wd') //排除优先
 				{
 					foreach($over_wd AS $key){
 						$key = str_ireplace('<', '&lt;', $key);
 						$key = str_ireplace('>', '&gt;', $key);
-						if(substr_count($sl, $key)){
+						//if(substr_count($sl, $key)){
+						if(stripos($sl, $key) !== false){
 							$sl_pass = 0;
 							break;
 						}
@@ -174,9 +175,9 @@
 				
 				
 				if('and' == $cfg_rule_cache['in_wd_relation']){//查找关键词and关系
-					if($in_wd_length && $sl_pass){//再匹配
+					if($in_wd_count && $sl_pass){//再匹配
 						$sl_pass = 1;
-						for($i=0; $i<$in_wd_length; $i++){
+						for($i=0; $i<$in_wd_count; $i++){
 							//if(!substr_count($left_str, $in_wd[$i])){ //大小写敏感
 							if(stripos($left_str, $in_wd[$i]) === false){ //不区分大小写
 								$sl_pass = 0;
@@ -187,9 +188,9 @@
 						}
 					}
 				}else{//查找关键词or关系匹配，默认
-					if($in_wd_length && $sl_pass){//再匹配
+					if($in_wd_count && $sl_pass){//再匹配
 						$sl_pass = 0;
-						for($i=0; $i<$in_wd_length; $i++){
+						for($i=0; $i<$in_wd_count; $i++){
 							//if(substr_count($left_str, $in_wd[$i])){
 							if(stripos($left_str, $in_wd[$i]) !== false){
 								$sl = str_ireplace($in_wd[$i], '<em>'.$in_wd[$i].'</em>', $sl);

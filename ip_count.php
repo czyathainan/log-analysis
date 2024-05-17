@@ -1,6 +1,5 @@
 <?php
 	set_time_limit(0);
-	include(dirname(__FILE__).'/function.inc.php');
 	$cfg_rule_cache = include(dirname(__FILE__).'/runtime/rule.cache.php');
 	
 	list($mico_second, $second) = explode(' ', microtime());
@@ -51,9 +50,9 @@
 				if(empty($s1) || substr($s1, 0, 1)=='#'){
 					continue;
 				}
-				$in_wd[] = $s1;
+				$in_wd[] = strtolower($s1);
 			}
-			$in_wd_length = count($in_wd);
+			$in_wd_count = count($in_wd);
 			fclose($fp);
 			
 			$fp = fopen(dirname(__FILE__).'/runtime/over_wd.txt', 'r');//排除词
@@ -64,9 +63,9 @@
 				if(empty($s2) || substr($s2, 0, 1)=='#'){
 					continue;
 				}
-				$over_wd[] = $s2;
+				$over_wd[] = strtolower($s2);
 			}
-			$over_wd_length = count($over_wd);
+			$over_wd_count = count($over_wd);
 			fclose($fp);
 			
 			$fp = fopen(dirname(__FILE__).'/log/'.$get_filename, 'r');
@@ -78,6 +77,7 @@
 				$sl = urldecode($sl);
 				$sl = str_ireplace('<', '&lt;', $sl);
 				$sl = str_ireplace('>', '&gt;', $sl);
+				$sl	= strtolower($sl);
 				
 				if($sl){
 					$all_line++;
@@ -93,7 +93,7 @@
 				
 				$sl_pass = 1; //当前行的记录是否符合筛选规则，1：是，0否
 				
-				if($in_wd_length && $cfg_rule_cache['wd_priority']=='in_wd') //查找优先
+				if($in_wd_count && $cfg_rule_cache['wd_priority']=='in_wd') //查找优先
 				{
 					$sl_pass = 0;
 					foreach($in_wd AS $key){
@@ -103,7 +103,7 @@
 						}
 					}
 				}
-				else if($over_wd_length && $cfg_rule_cache['wd_priority']=='over_wd') //排除优先
+				else if($over_wd_count && $cfg_rule_cache['wd_priority']=='over_wd') //排除优先
 				{
 					foreach($over_wd AS $key){
 						if(substr_count($sl, $key)){
@@ -129,9 +129,9 @@
 				
 				
 				if('and' == $cfg_rule_cache['in_wd_relation']){//查找关键词and关系
-					if($in_wd_length && $sl_pass){//再匹配
+					if($in_wd_count && $sl_pass){//再匹配
 						$sl_pass = 1;
-						for($i=0; $i<$in_wd_length; $i++){
+						for($i=0; $i<$in_wd_count; $i++){
 							if(!substr_count($left_str, $in_wd[$i])){
 								$sl_pass = 0;
 								break;
@@ -141,9 +141,9 @@
 						}
 					}
 				}else{//查找关键词or关系匹配，默认
-					if($in_wd_length && $sl_pass){//再匹配
+					if($in_wd_count && $sl_pass){//再匹配
 						$sl_pass = 0;
-						for($i=0; $i<$in_wd_length; $i++){
+						for($i=0; $i<$in_wd_count; $i++){
 							if(substr_count($left_str, $in_wd[$i])){
 								$sl = str_ireplace($in_wd[$i], '<em>'.$in_wd[$i].'</em>', $sl);
 								$sl_pass = 1;
@@ -162,7 +162,7 @@
 				{
 					switch($get_type)
 					{
-						case 'c_net' : //按B段统计
+						case 'c_net' : //按C段统计
 							preg_match('/(\d{1,3}\.){3}(?=\d{1,3})/', $sl, $match);
 							if(isset($match[0]) && $match[0])
 							{
@@ -170,7 +170,7 @@
 							}
 						break;
 						
-						case 'b_net' : //按C段统计
+						case 'b_net' : //按B段统计
 							preg_match('/(\d{1,3}\.){2}(?=\d{1,3}\.\d{1,3})/', $sl, $match);
 							if(isset($match[0]) && $match[0])
 							{

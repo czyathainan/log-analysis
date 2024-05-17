@@ -8,7 +8,7 @@
 	
 	<div id="bottom_table">
 		<div class="left">
-			<div style="border:1px solid #999999; min-width:300px; height:110px; margin-right:40px; overflow-y:scroll;">
+			<div style="border:1px solid #999999; min-width:320px; height:105px; margin-right:20px; overflow-y:scroll;">
 			<?php
 				$log_dir = scandir(dirname(__FILE__).'/log/');
 				foreach($log_dir AS $v){
@@ -39,17 +39,17 @@
 		
 		<form method="POST" action="rule.php?update=1" class="left">
 			<div style="float:left;">
-				请输入你要查找的关键字眼 (一行一个关键词)<br />
-				<textarea name="in_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/in_wd.txt');?></textarea>
+				请输入你要查找的关键词 (一行一个关键词,不区分大小写)<br />
+				<textarea name="in_wd" style="width:350px; height:80px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/in_wd.txt');?></textarea>
 			</div>
 
 			<div class="left">
-				请输入你要排除的关键字眼 (一行一个关键词)<br />
-				<textarea name="over_wd" style="width:300px; height:75px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/over_wd.txt');?></textarea>
+				请输入你要排除的关键词 (一行一个关键词,不区分大小写)<br />
+				<textarea name="over_wd" style="width:350px; height:80px;"><?php echo file_get_contents(dirname(__FILE__).'/runtime/over_wd.txt');?></textarea>
 			</div>
 			<div class="clear"></div>
 			
-			<div style="padding-top:10px;">
+			<div style="padding-top:5px;">
 				查找词关系：<select name="in_wd_relaction">
 				<?php
 					$s = '<option value="or">OR</option>

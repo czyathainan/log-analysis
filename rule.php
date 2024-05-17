@@ -1,5 +1,6 @@
 <?php
 header('Content-type:text/html; charset=utf-8;');
+
 $in_wd		= isset($_POST['in_wd']) ? trim($_POST['in_wd']) : '';
 $in_wd		= str_ireplace('\"', '"', $in_wd);
 $over_wd	= isset($_POST['over_wd']) ? trim($_POST['over_wd']) : '';
