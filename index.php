@@ -35,15 +35,12 @@
 	.result div:hover{background:#ffffff;}
 	.result div span.red{background:#ff0000; color:#ffffff; padding:0 3px;}
 	.result div{padding:3px 0; line-height:1.0;}
-	.result u{background:#93a554; text-decoration:none;}
-	.result em{background:#000000; color:#ffffff; font-style:normal;}
-	textarea{border:1px solid #cecece; margin-right:15px;}
-	.redBG_white{background:#ff0000;color:#ffffff;padding:0 5px;}
-	.toolBar{border:1px solid #cecece; position:fixed; background:#ffffff; width:95%; padding:5px 10px 10px; min-width:1000px; border-bottom-width:2px;}
-	
 	.result u{background:#d4d0c8; text-decoration:none;}
+	.result em{background:#000000; color:#ffffff; font-style:normal;}
 	.result i{border:1px solid #666666; border-radius:10px; margin-left:5px; padding:0 4px; background:#ffffff; font-style:normal;}
 	textarea{border:1px solid #cecece; margin-right:15px; line-height:1.2;}
+	.redBG_white{background:#ff0000;color:#ffffff;padding:0 5px;}
+	.toolBar{border:1px solid #cecece; position:fixed; background:#ffffff; width:95%; padding:5px 10px 10px; min-width:1000px; border-bottom-width:2px;}
 </style>
 </head>
 <body>
@@ -77,7 +74,7 @@
 			{
 				$s1 = fgets($fp);
 				$s1 = trim($s1);
-				if(empty($s1) || substr($s1, 0, 1)=='#'){
+				if(empty($s1) || substr($s1, 0, 1)=='#'){ //关键词首字符是#表示忽略该词
 					continue;
 				}
 				$in_wd[] = $s1;
