@@ -12,7 +12,7 @@
 			<?php
 				$log_dir = scandir(dirname(__FILE__).'/log/');
 				foreach($log_dir AS $v){
-					if(!substr_count($v, '.txt') && !substr_count($v, '.log')){
+					if(in_array($v, ['.', '..', '.gitignore'])){
 						continue;
 					}
 					$fsize = filesize(dirname(__FILE__).'/log/'.$v);
